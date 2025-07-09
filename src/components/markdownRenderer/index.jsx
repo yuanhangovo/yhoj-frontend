@@ -2,7 +2,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { Typography, Divider } from "antd";
-import { atomDark, solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { solarizedlight, solarizedDarkAtom } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const { Title, Text, Paragraph, Link } = Typography;
 
@@ -42,7 +42,7 @@ const MarkdownRenderer = ({ content, theme }) => {
           return (
             <SyntaxHighlighter
               language={language}
-              style={theme === "dark" ? atomDark : solarizedlight}
+              style={theme === "dark" ? solarizedDarkAtom : solarizedlight}
               showLineNumbers
               PreTag="div"
             >

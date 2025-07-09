@@ -1,11 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux'
-import { ConfigProvider, theme, Card, Spin, Space, Layout, Flex, Drawer } from 'antd'
+import { ConfigProvider, theme, Card, Spin, Space, Layout, Flex } from 'antd'
 import { Suspense, lazy } from 'react'
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './problems.styl'
 import ProblemsHeader from '@/components/problemsHeader';
 import CodeEditor from '@/components/codeEditor';
+import { createStyles } from 'antd-style';
 
 const { darkAlgorithm, defaultAlgorithm } = theme
 const { Content } = Layout
@@ -29,7 +30,33 @@ def twoSum(nums, target):
 \`\`\`
 `
 
+// 炫彩按钮
+const useStyle = createStyles(({ prefixCls, css }) => ({
+  linearGradientButton: css`
+    &.M-Submit {
+      > span {
+        position: relative;
+      }
+
+      &::before {
+        content: '';
+        background: linear-gradient(135deg, #6253e1, #04befe);
+        position: absolute;
+        inset: -1px;
+        opacity: 1;
+        transition: all 0.3s;
+        border-radius: inherit;
+      }
+
+      &:hover::before {
+        opacity: 0
+      }
+    }
+  `,
+}));
+
 const Problems = () => {
+    const { styles } = useStyle();
     const { problemId } = useParams();
     const MarkdownRenderer = lazy(() => import('@/components/markdownRenderer'))
 
@@ -53,7 +80,9 @@ const Problems = () => {
     }
 
     return (
-        <ConfigProvider theme={antdTheme}>
+        <ConfigProvider theme={antdTheme} button={{
+            className: styles.linearGradientButton,
+        }}>
             <Layout className='P-problems G-fullpage'>
                 <ProblemsHeader />
                 <Layout className='M-main'>
@@ -75,7 +104,7 @@ const Problems = () => {
                             <Card className='M-coding' 
                                 style={{width: '50%'}}
                             >
-                                <CodeEditor />
+                                <CodeEditor theme={globalTheme.dark ? "dark" : "light"}/>
                             </Card>
                         </Flex>
                     </Content>
