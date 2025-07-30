@@ -6,6 +6,7 @@ import Home from '@/pages/home'
 import Users from '@/pages/users'
 import Problemset from '@/pages/problemset'
 import Problems from '@/pages/problems'
+import SignUp from '../pages/signup'
 
 // 全局路由
 function globalRoute() {
@@ -17,6 +18,11 @@ function globalRoute() {
             // 精确匹配"/login"，跳转Login页面
             path: '/login',
             element: <Login />,
+        },
+        {
+            // 精确匹配"/signup"，跳转SignUp页面
+            path: '/signup',
+            element: <SignUp />,
         },
         {
             // 精确匹配"/problem/:problemId"，跳转Problems页面

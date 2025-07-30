@@ -23,6 +23,8 @@ export const API_CODE = {
     ERR_NO_DATA: 301,
     // API请求正常，登录异常
     ERR_LOGOUT: 401,
+    // API请求异常
+    ERR_FAILED: 500,
 }
 
 // API请求异常统一报错提示
@@ -36,33 +38,31 @@ export const apiReqs = {
             .post(API_DOMAIN + 'login', config.data)
             .then((res) => {
                 let result = res.data
-                config.done && config.done(result)
-                if (result.code === API_CODE.OK) {
+                // console.log(res)
+                if (res.status === API_CODE.OK) {
+                    // 登录成功，将用户信息存入localStorage
+                    console.log("Login successful")
+                    // 存储用户登录信息
+                    let jwt = res.headers['authorization']
+                    // console.log(jwt)
                     window.localStorage.setItem(
                         SESSION_LOGIN_INFO,
-                        JSON.stringify({
-                            uid: result.data.loginUid,
-                            nickname: result.data.nickname,
-                            token: result.data.token,
-                        })
+                        jwt
                     )
                     config.success && config.success(result)
                 } else {
                     config.fail && config.fail(result)
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 config.done && config.done()
                 config.fail &&
                     config.fail({
-                        message: API_FAILED,
+                        message: err.response.data.error,
                     })
-                Modal.error({
-                    title: '登录失败',
-                })
             })
     },
-    // 管登出（登出后将登录信息从localStorage删除）
+    // 登出（登出后将登录信息从localStorage删除）
     signOut: () => {
         const { uid, token } = getLocalLoginInfo()
         let headers = {
@@ -82,6 +82,29 @@ export const apiReqs = {
                 logout()
             })
     },
+    signUp: (config) => {
+        axios
+            .post(API_DOMAIN + 'signup', config.data)
+            .then((res) => {
+                // console.log(res)
+                let result = res.data
+                if (res.status === API_CODE.OK) {
+                    // 注册成功，跳转到登录页面
+                    console.log("Sign up successful")
+                    config.success && config.success(result)
+                } else {
+                    config.fail && config.fail(result)
+                }
+            })
+            .catch((err) => {
+                config.done && config.done()
+                // console.log(err)
+                config.fail &&
+                    config.fail({
+                        message: err.response.data.error,
+                    })
+            })
+        },
     // 获取用户列表（仅做示例）
     getUserList: (config) => {
         config.method = 'get'

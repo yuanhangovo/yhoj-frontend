@@ -7,6 +7,9 @@ Mock.mock(domain + 'login', function () {
     let result = {
         code: 200,
         message: 'OK',
+        headers: {
+            authorization: "jwt.token.yyds2023"
+        },
         data: {
             loginUid: 10000,
             nickname: '兔子先生',

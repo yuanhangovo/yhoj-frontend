@@ -11,6 +11,7 @@ import { globalConfig } from '@/globalConfig'
 import { useNavigate } from 'react-router-dom'
 import logoImg from '@/common/images/logo.svg'
 import './header.styl'
+import {jwtDecode} from 'jwt-decode'
 
 function Header() {
     // 获取redux派发钩子
@@ -39,9 +40,22 @@ function Header() {
         })
     }
 
-    const loginInfo = JSON.parse(
-        window.localStorage.getItem(globalConfig.SESSION_LOGIN_INFO)
-    )
+    // const loginInfo = JSON.parse(
+    //     window.localStorage.getItem(globalConfig.SESSION_LOGIN_INFO)
+    // )
+
+    let loginInfo = null
+    const token = window.localStorage.getItem(globalConfig.SESSION_LOGIN_INFO)
+    if (token) {
+        try {
+            loginInfo = jwtDecode(window.localStorage.getItem(globalConfig.SESSION_LOGIN_INFO))
+            console.log(loginInfo)
+        }catch (error) {
+            console.error("Invalid token format", error)
+        }
+    }else {
+        console.log("No login info found")
+    }
 
     const menuItemsUnlogin = [
         {
@@ -98,7 +112,7 @@ function Header() {
                     <Dropdown menu={{ items: loginInfo ? menuItems : menuItemsUnlogin }}>
                         <div className="user-menu">
                             <span>
-                                {loginInfo ? loginInfo.nickname : '未登录'}
+                                {loginInfo ? loginInfo.username : '未登录'}
                             </span>
                             <CaretDownOutlined className="arrow" />
                         </div>

@@ -10,7 +10,7 @@ import zhCN from 'antd/locale/zh_CN'
 // 引入Ant Design兼容包兼容React19
 import '@ant-design/v5-patch-for-react-19'
 // mock.js模拟数据
-import './mock'
+// import './mock'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
